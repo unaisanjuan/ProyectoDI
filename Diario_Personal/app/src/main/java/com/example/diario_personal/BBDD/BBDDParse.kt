@@ -3,19 +3,14 @@ package com.example.diario_personal.BBDD
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.diario_personal.Modelo.Diario
+import com.example.diario_personal.Modelo.Nota
 import com.example.diario_personal.Modelo.Usuario
 import com.parse.ParseObject
 import com.parse.ParseQuery
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.text.ParseException
 
 class BBDDParse {
 
-    fun insetarNota(miNota: Diario) {
+    fun insetarNota(miNota: Nota) {
         val registroNota = ParseObject("tabla_notas")
         registroNota.put("titulo", miNota.titulo)
         registroNota.put("contenido", miNota.contenido)
@@ -30,7 +25,7 @@ class BBDDParse {
         }
     }
 
-    fun eliminarNota(miNota: Diario) {
+    fun eliminarNota(miNota: Nota) {
         val query =
             ParseQuery.getQuery<ParseObject>("tabla_notas")
         query.whereEqualTo("idNota", miNota.id)
@@ -47,7 +42,7 @@ class BBDDParse {
         }
     }
 
-    fun modificarNota(miNota: Diario) {
+    fun modificarNota(miNota: Nota) {
         val query =
             ParseQuery.getQuery<ParseObject>("tabla_notas")
         query.whereEqualTo("idNota", miNota.id)
@@ -67,18 +62,18 @@ class BBDDParse {
         }
     }
 
-    fun mostrarNotas(): MutableLiveData<List<Diario>> {
-        val misNotas: MutableLiveData<List<Diario>> = MutableLiveData()
+    fun mostrarNotas(): MutableLiveData<List<Nota>> {
+        val misNotas: MutableLiveData<List<Nota>> = MutableLiveData()
         val query = ParseQuery.getQuery<ParseObject>("tabla_notas")
         query.orderByAscending("idNota")
         query.findInBackground { objects, e ->
             if (e == null) {
                 val notas = objects.map { i ->
-                    Diario(
-                        i.getInt("idNota"),
-                        i.getString("fecha") ?: "",
+                    Nota(
+                        i.getString("titulo") ?: "",
                         i.getString("contenido") ?: "",
-                        i.getString("titulo") ?: ""
+                        i.getString("fecha") ?: "",
+                        i.getInt("idNota")
                     )
                 }
                 misNotas.postValue(notas)
@@ -92,11 +87,11 @@ class BBDDParse {
         query.whereEqualTo("idNota", id)
         query.getFirstInBackground { parseObject, parseException ->
             if (parseException == null) {
-                val nota = Diario(
-                    parseObject.getInt("idNota"),
-                    parseObject.getString("fecha") ?: "",
+                val nota = Nota(
+                    parseObject.getString("titulo") ?: "",
                     parseObject.getString("contenido") ?: "",
-                    parseObject.getString("titulo") ?: ""
+                    parseObject.getString("fecha") ?: "",
+                    parseObject.getInt("idNota")
                 )
             } else {
                 throw Exception(parseException.localizedMessage)

@@ -2,25 +2,25 @@ package com.example.diario_personal.BBDD
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.diario_personal.Modelo.Diario
+import com.example.diario_personal.Modelo.Nota
 import com.example.diario_personal.Modelo.Usuario
 
 class Repositorio(private val miBBDDPARSE: BBDDParse) {
 
 
-    fun mostrarNotas(): MutableLiveData<List<Diario>> {
+    fun mostrarNotas(): MutableLiveData<List<Nota>> {
         return miBBDDPARSE.mostrarNotas()
     }
 
-    fun borrarNota(miNota: Diario) {
+    fun borrarNota(miNota: Nota) {
         miBBDDPARSE.eliminarNota(miNota)
     }
 
-    fun modificarNota(miNota: Diario) {
+    fun modificarNota(miNota: Nota) {
         miBBDDPARSE.modificarNota(miNota)
     }
 
-    fun insertarNota(miNota: Diario) {
+    fun insertarNota(miNota: Nota) {
         miBBDDPARSE.insetarNota(miNota)
     }
 

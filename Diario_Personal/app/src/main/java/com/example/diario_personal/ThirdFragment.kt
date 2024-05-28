@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.diario_personal.databinding.FragmentThirdBinding
 
 
@@ -14,7 +15,7 @@ class ThirdFragment : Fragment() {
 
     private var _binding: FragmentThirdBinding? = null
     private val binding get() = _binding!!
-
+    private lateinit var notaAdapter: Adaptador
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,7 +28,21 @@ class ThirdFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        notaAdapter = Adaptador(mutableListOf())
+        binding.recyclerViewNotas.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = notaAdapter
+        }
 
+        binding.btnAgregarNota.setOnClickListener {
+            notaAdapter.agregarNota()
+        }
+
+        binding.btnLogOut.setOnClickListener {
+            findNavController().navigate(R.id.action_thirdFragment_to_FirstFragment)
+        }
+
+        
 
     }
 

@@ -12,8 +12,8 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import com.example.diario_personal.BBDD.BBDDParse
 import com.example.diario_personal.BBDD.Repositorio
-import com.example.diario_personal.Modelo.DiarioVM
-import com.example.diario_personal.Modelo.DiarioViewModelFactory
+import com.example.diario_personal.Modelo.NotaVM
+import com.example.diario_personal.Modelo.NotaViewModelFactory
 import com.example.diario_personal.Modelo.UsuarioVM
 import com.example.diario_personal.Modelo.UsuarioViewModelFactory
 import com.example.diario_personal.databinding.ActivityMainBinding
@@ -28,8 +28,8 @@ class MainActivity : AppCompatActivity() {
     val usuarioVM: UsuarioVM by viewModels {
         UsuarioViewModelFactory(miRepositorio)
     }
-    val diarioVM: DiarioVM by viewModels {
-        DiarioViewModelFactory(miRepositorio)
+    val notaVM: NotaVM by viewModels {
+        NotaViewModelFactory(miRepositorio)
     }
 
 
