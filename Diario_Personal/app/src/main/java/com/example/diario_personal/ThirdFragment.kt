@@ -42,7 +42,7 @@ class ThirdFragment : Fragment() {
             findNavController().navigate(R.id.action_thirdFragment_to_FirstFragment)
         }
 
-        
+
 
     }
 
