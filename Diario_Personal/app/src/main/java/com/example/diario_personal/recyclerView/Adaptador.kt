@@ -11,7 +11,8 @@ import com.example.diario_personal.Modelo.NotaVM
 
 class Adaptador(private val notas: MutableList<Nota>, private val notaViewModel: NotaVM) : RecyclerView.Adapter<Adaptador.NotaViewHolder>() {
 
-    private var maxId = if (notas.isNotEmpty()) notas.maxOf { it.id } else 0
+    private var maxId: Int = 0
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotaViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_nota, parent, false)
         return NotaViewHolder(view)
@@ -24,17 +25,22 @@ class Adaptador(private val notas: MutableList<Nota>, private val notaViewModel:
 
     override fun getItemCount() = notas.size
 
-    fun agregarNota() {
+    fun inicializarMaxId() {
+        notaViewModel.buscarNotaPorIdMax().observeForever { maxIdActual ->
+            maxId = maxIdActual ?: 0
+        }
+    }
 
-        val nuevaid = ++maxId
-        val nuevaNota = Nota("", "",nuevaid)
+    fun agregarNota() {
+        val nuevoId = ++maxId
+        val nuevaNota = Nota("", "", nuevoId)
         notas.add(nuevaNota)
         notifyItemInserted(notas.size - 1)
         notaViewModel.insertarNota(nuevaNota)  // Insertar la nueva nota en la base de datos
-
     }
 
     fun setNotas(nuevasNotas: MutableList<Nota>) {
+        this.notas.clear() // Limpiar la lista antes de añadir nuevas notas
         this.notas.addAll(nuevasNotas)
         notifyDataSetChanged()
     }
@@ -42,40 +48,37 @@ class Adaptador(private val notas: MutableList<Nota>, private val notaViewModel:
     inner class NotaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val etTitulo: EditText = itemView.findViewById(R.id.etTitulo)
         private val etContenido: EditText = itemView.findViewById(R.id.etContenido)
+        private val etId: EditText = itemView.findViewById(R.id.etId)
         private val btnEditar: Button = itemView.findViewById(R.id.btnEditar)
         private val btnEliminar: Button = itemView.findViewById(R.id.btnEliminar)
 
         fun bind(nota: Nota) {
             etTitulo.setText(nota.titulo)
             etContenido.setText(nota.contenido)
+            etId.setText(nota.id.toString())
 
-            // Estado inicial de la edición
             var editando = false
 
-            // Mostrar el botón "Guardar" al inicio
             btnEditar.text = "Guardar"
 
             btnEditar.setOnClickListener {
-                // Cambiar el estado de edición
                 editando = !editando
 
                 if (!editando) {
-                    // Guardar los cambios en la base de datos cuando se desactiva la edición
                     nota.titulo = etTitulo.text.toString()
                     nota.contenido = etContenido.text.toString()
+                    nota.id = etId.text.toString().toInt()
                     notaViewModel.modificarNota(nota)
                 }
 
-                // Habilitar o deshabilitar la edición de los campos según el estado
                 etTitulo.isEnabled = editando
                 etContenido.isEnabled = editando
+                etId.isEnabled = editando
 
-                // Cambiar el texto del botón de editar según el estado
                 btnEditar.text = if (editando) "Guardar" else "Editar"
             }
 
             btnEliminar.setOnClickListener {
-                // Eliminar la nota de la lista y notificar el cambio
                 val posicion = adapterPosition
                 if (posicion != RecyclerView.NO_POSITION) {
                     val notaAEliminar = notas[posicion]

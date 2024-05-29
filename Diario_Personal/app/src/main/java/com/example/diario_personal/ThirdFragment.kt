@@ -23,6 +23,7 @@ class ThirdFragment : Fragment() {
     ): View? {
         _binding = FragmentThirdBinding.inflate(inflater, container, false)
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,10 +37,18 @@ class ThirdFragment : Fragment() {
             adapter = notaAdapter
         }
 
+
+
         // Observa las notas en el ViewModel y actualiza el adaptador cuando cambien
         notaViewModel.mostrarNotas().observe(viewLifecycleOwner, Observer { notas ->
             notas?.let {
                 notaAdapter.setNotas(it.toMutableList())
+            }
+        })
+
+        notaViewModel.buscarNotaPorIdMax().observe(viewLifecycleOwner, Observer { maxId ->
+            maxId?.let {
+                notaAdapter.inicializarMaxId()
             }
         })
 
@@ -50,6 +59,8 @@ class ThirdFragment : Fragment() {
         binding.btnLogOut.setOnClickListener {
             findNavController().navigate(R.id.action_thirdFragment_to_FirstFragment)
         }
+
+
     }
 
     override fun onDestroyView() {

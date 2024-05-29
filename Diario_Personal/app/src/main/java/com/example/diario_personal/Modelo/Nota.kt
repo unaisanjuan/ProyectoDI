@@ -15,11 +15,6 @@ class Nota {
 
     constructor()
 
-    constructor(titulo: String, contenido: String, fecha: String) {
-        this.titulo = titulo
-        this.contenido = contenido
-        this.fecha = fecha
-    }
 
     constructor(titulo: String, contenido: String) {
         this.titulo = titulo
