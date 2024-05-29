@@ -24,6 +24,10 @@ class Repositorio(private val miBBDDPARSE: BBDDParse) {
         miBBDDPARSE.insetarNota(miNota)
     }
 
+    fun buscarNotaPorIdMax(): MutableLiveData<Int> {
+        return miBBDDPARSE.buscarNotaPorIdMax()
+    }
+
     fun buscarPorId(id: Int) {
         miBBDDPARSE.buscarNotaPorId(id)
     }

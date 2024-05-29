@@ -26,6 +26,12 @@ class Nota {
         this.contenido = contenido
     }
 
+    constructor(titulo: String, contenido: String, id: Int) {
+        this.titulo = titulo
+        this.contenido = contenido
+        this.id = id
+    }
+
 
 }
 

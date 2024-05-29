@@ -34,8 +34,8 @@
               android:id="@+id/btnLogOut"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:gravity="bottom|start"
-              android:text="Cerrar Sesión" />
+              android:text="Cerrar Sesión"
+              android:layout_marginRight="20dp"/>
 
           <ImageButton
               android:id="@+id/btnAgregarNota"

@@ -46,6 +46,7 @@ class BBDDParse {
         val query =
             ParseQuery.getQuery<ParseObject>("tabla_notas")
         query.whereEqualTo("idNota", miNota.id)
+        Log.d("ide",miNota.id.toString())
         query.getFirstInBackground { parseObject, parseException ->
             if (parseException == null) {
                 parseObject.put("titulo", miNota.titulo)
@@ -98,6 +99,23 @@ class BBDDParse {
             }
         }
     }
+
+    fun buscarNotaPorIdMax(): MutableLiveData<Int> {
+        val idMaximo: MutableLiveData<Int> = MutableLiveData()
+        val query = ParseQuery.getQuery<ParseObject>("tabla_notas")
+        query.orderByDescending("idNota")
+        query.setLimit(1)
+        query.getFirstInBackground { parseObject, parseException ->
+            if (parseException == null) {
+                val idMax = parseObject.getInt("idNota")
+                idMaximo.postValue(idMax)
+            } else {
+                throw Exception(parseException.localizedMessage)
+            }
+        }
+        return idMaximo
+    }
+
 
     fun insertarUsuario(miUsuario: Usuario) {
         val registroUsuario = ParseObject("tabla_usuarios")

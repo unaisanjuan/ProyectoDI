@@ -1,5 +1,7 @@
 package com.example.diario_personal.Modelo
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -12,8 +14,8 @@ class NotaVM(private val miRepositorio: Repositorio): ViewModel() {
         miRepositorio.insertarNota(nota)
     }
 
-    fun mostrarNotas() = viewModelScope.launch {
-        miRepositorio.mostrarNotas()
+    fun mostrarNotas(): LiveData<List<Nota>> {
+        return miRepositorio.mostrarNotas()
     }
 
     fun buscarNotaPorId(nota: Nota) = viewModelScope.launch {
@@ -22,6 +24,10 @@ class NotaVM(private val miRepositorio: Repositorio): ViewModel() {
 
     fun modificarNota(nota: Nota) = viewModelScope.launch {
         miRepositorio.modificarNota(nota)
+    }
+
+    fun buscarNotaPorIdMax(): MutableLiveData<Int> {
+        return miRepositorio.buscarNotaPorIdMax()
     }
 
     fun eliminarNota(nota: Nota) = viewModelScope.launch {
