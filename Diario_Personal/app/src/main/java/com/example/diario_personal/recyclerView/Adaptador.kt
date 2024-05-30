@@ -5,14 +5,39 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.app.Activity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.diario_personal.Modelo.Nota
 import com.example.diario_personal.Modelo.NotaVM
+import java.util.Random
 
 class Adaptador(private val notas: MutableList<Nota>, private val notaViewModel: NotaVM) : RecyclerView.Adapter<Adaptador.NotaViewHolder>() {
 
     private var maxId: Int = 0
 
+    private val idSet = mutableSetOf<Int>()
+
+    init {
+        // Inicializar el conjunto con todos los IDs posibles
+        idSet.addAll(1..1000000)
+    }
+
+    // Función para generar un ID único
+    private fun generarIdUnico(): Int {
+        // Si el conjunto de IDs está vacío, no se pueden generar más IDs únicos
+        if (idSet.isEmpty()) {
+            throw IllegalStateException("No hay más IDs únicos disponibles.")
+        }
+
+        // Seleccionar un ID aleatorio del conjunto y luego eliminarlo
+        val randomIndex = Random().nextInt(idSet.size)
+        val iterator = idSet.iterator()
+        repeat(randomIndex) { iterator.next() }
+        val id = iterator.next()
+        iterator.remove()
+
+        return id
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotaViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_nota, parent, false)
         return NotaViewHolder(view)
@@ -25,14 +50,11 @@ class Adaptador(private val notas: MutableList<Nota>, private val notaViewModel:
 
     override fun getItemCount() = notas.size
 
-    fun inicializarMaxId() {
-        notaViewModel.buscarNotaPorIdMax().observeForever { maxIdActual ->
-            maxId = maxIdActual ?: 0
-        }
-    }
+    // crea un randomizer que se encarga de asignar un id a cada nota
+
 
     fun agregarNota() {
-        val nuevoId = ++maxId
+        val nuevoId = generarIdUnico()
         val nuevaNota = Nota("", "", nuevoId)
         notas.add(nuevaNota)
         notifyItemInserted(notas.size - 1)
@@ -48,14 +70,12 @@ class Adaptador(private val notas: MutableList<Nota>, private val notaViewModel:
     inner class NotaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val etTitulo: EditText = itemView.findViewById(R.id.etTitulo)
         private val etContenido: EditText = itemView.findViewById(R.id.etContenido)
-        private val etId: EditText = itemView.findViewById(R.id.etId)
         private val btnEditar: Button = itemView.findViewById(R.id.btnEditar)
         private val btnEliminar: Button = itemView.findViewById(R.id.btnEliminar)
 
         fun bind(nota: Nota) {
             etTitulo.setText(nota.titulo)
             etContenido.setText(nota.contenido)
-            etId.setText(nota.id.toString())
 
             var editando = false
 
@@ -67,13 +87,11 @@ class Adaptador(private val notas: MutableList<Nota>, private val notaViewModel:
                 if (!editando) {
                     nota.titulo = etTitulo.text.toString()
                     nota.contenido = etContenido.text.toString()
-                    nota.id = etId.text.toString().toInt()
                     notaViewModel.modificarNota(nota)
                 }
 
                 etTitulo.isEnabled = editando
                 etContenido.isEnabled = editando
-                etId.isEnabled = editando
 
                 btnEditar.text = if (editando) "Guardar" else "Editar"
             }

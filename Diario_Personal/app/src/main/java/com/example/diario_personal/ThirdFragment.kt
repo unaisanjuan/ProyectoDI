@@ -46,11 +46,6 @@ class ThirdFragment : Fragment() {
             }
         })
 
-        notaViewModel.buscarNotaPorIdMax().observe(viewLifecycleOwner, Observer { maxId ->
-            maxId?.let {
-                notaAdapter.inicializarMaxId()
-            }
-        })
 
         binding.btnAgregarNota.setOnClickListener {
             notaAdapter.agregarNota()
@@ -60,11 +55,16 @@ class ThirdFragment : Fragment() {
             findNavController().navigate(R.id.action_thirdFragment_to_FirstFragment)
         }
 
+        binding.btnIrGraficos.setOnClickListener {
+            findNavController().navigate(R.id.action_thirdFragment_to_fourthFragment)
+        }
+
 
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+
         _binding = null
     }
 

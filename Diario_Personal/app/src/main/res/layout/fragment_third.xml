@@ -23,25 +23,45 @@
          android:layout_height="0dp"
          android:layout_weight="1"/>
 
-     <!-- Botones de agregar nota y cerrar sesión -->
+     <!-- Botones de cerrar sesión, agregar nota y ir a gráficos -->
      <LinearLayout
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:orientation="horizontal"
-         android:gravity="bottom|center">
+         android:gravity="bottom">
 
-          <Button
+          <ImageButton
               android:id="@+id/btnLogOut"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:text="Cerrar Sesión"
-              android:layout_marginRight="20dp"/>
+              android:src="@drawable/ic_logout"
+              android:background="@null"
+              android:layout_gravity="bottom|start"/>
+
+          <Space
+              android:layout_width="0dp"
+              android:layout_height="0dp"
+              android:layout_weight="1"/>
 
           <ImageButton
+              android:id="@+id/btnIrGraficos"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:src="@drawable/ic_graficos"
+              android:background="@null"
+              android:layout_gravity="bottom|center_horizontal"/>
+          <Space
+              android:layout_width="0dp"
+              android:layout_height="0dp"
+              android:layout_weight="1"/>
+          <ImageButton
+
               android:id="@+id/btnAgregarNota"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:src="@drawable/ic_add_black_24dp" />
+              android:src="@drawable/ic_add_black_24dp"
+              android:background="@null"
+              android:layout_gravity="bottom|end"/>
      </LinearLayout>
 
 </LinearLayout>

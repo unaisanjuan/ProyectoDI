@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-
+    private var tiempoInicio: Long = 0
     //definir viewmodel usuario
     private val miRepositorio by lazy { Repositorio(BBDDParse()) }
     val usuarioVM: UsuarioVM by viewModels {
@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity() {
     val notaVM: NotaVM by viewModels {
         NotaViewModelFactory(miRepositorio)
     }
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,11 +46,19 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
+        supportActionBar?.hide()
+        tiempoInicio = System.currentTimeMillis()
+    }
 
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+    override fun onResume() {
+        super.onResume()
+        tiempoInicio = System.currentTimeMillis()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val tiempoTranscurrido = System.currentTimeMillis() - tiempoInicio
+        // Guardar tiempoTranscurrido en SharedPreferences u otra forma de almacenamiento
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
